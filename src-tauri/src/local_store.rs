@@ -112,7 +112,9 @@ pub struct Settings {
     #[serde(default)]
     pub api_settings: ApiSettings,
     #[serde(default)]
-    pub fsd_connection: FsdConnectionSettings
+    pub fsd_connection: FsdConnectionSettings,
+    #[serde(default)]
+    pub radar_settings: RadarSettings
 }
 
 #[derive(Serialize, Deserialize)]
@@ -182,6 +184,24 @@ impl Default for FsdConnectionSettings {
 }
 fn default_fsd_port() -> u16 {6809}
 fn default_fsd_protocol() -> String {"Classic".to_string()}
+
+#[derive(Serialize, Deserialize, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct RadarSettings {
+    #[serde(default)]
+    pub sector_file_path: PathBuf,
+    #[serde(default)]
+    pub symbology_file_path: PathBuf,
+    #[serde(default)]
+    pub asr_file_path: PathBuf,
+    #[serde(default)]
+    pub center_lat: f32,
+    #[serde(default)]
+    pub center_lon: f32,
+    #[serde(default)]
+    pub zoom_level: f32,
+}
+
 
 #[derive(Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]

@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component} from "react";
 import {open} from '@tauri-apps/api/dialog';
 import {loadEuroscopeScenario} from "../../actions/data_actions";
 import {Button, ButtonGroup, OverlayTrigger, Tooltip} from "react-bootstrap";
@@ -7,7 +7,7 @@ import {NavigraphAuthButton} from "../settings/navigraph_auth";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faFileCirclePlus, faMap, faPlane} from "@fortawesome/free-solid-svg-icons";
 import {SectorFilesButton} from "../settings/sector_files_button";
-import {createMapWindow} from "../../actions/tauri_actions";
+import { launchRadar } from "../../actions/radar_actions";
 
 export class DataPage extends Component {
     constructor(props) {
@@ -15,7 +15,7 @@ export class DataPage extends Component {
     }
 
     openMapPage = async () => {
-        await createMapWindow();
+        await launchRadar();
     }
 
     chooseEsFile = async () => {

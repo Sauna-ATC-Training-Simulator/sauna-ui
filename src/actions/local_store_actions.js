@@ -10,6 +10,8 @@ export async function getStoreItem(key){
     });
 }
 
+
+
 export async function setStoreItem(key, value){
     // Invoke Rust command
     return await invoke('store_set', {
@@ -29,6 +31,15 @@ export async function getApiSettings(){
 
 export async function saveApiSettings(apiSettings){
     await setStoreItem("settings.apiSettings", apiSettings);
+}
+
+export async function getRadarSettings(){
+    return await getStoreItem("settings.radarSettings");
+}
+
+export async function saveRadarSettings(radarSettings){
+    console.log(radarSettings);
+    await setStoreItem("settings.radarSettings", radarSettings);
 }
 
 export async function getFsdSettings(){

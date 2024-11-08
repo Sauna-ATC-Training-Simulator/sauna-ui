@@ -21,7 +21,7 @@ pub struct AppStateWrapper(pub Mutex<AppState>);
 fn main() {
     let app = tauri::Builder::default()
         .manage(AppStateWrapper(Mutex::new(AppState::new())))
-        .invoke_handler(tauri::generate_handler![extract_zip, store_set, store_get, store_save, download_file, get_sauna_api_builtin, get_sauna_api_conn_details])
+        .invoke_handler(tauri::generate_handler![extract_zip, store_set, store_get, store_save, download_file, get_sauna_api_builtin, get_sauna_api_conn_details, launch_radar])
         .setup(|app| {
             // Send Sauna API Built In event
             app.emit_all("sauna-api-builtin", true).unwrap();
@@ -44,6 +44,7 @@ fn main() {
         .expect("error while running tauri application");
     app.run(|_app_handle, event | match event {
         tauri::RunEvent::Exit {..} | tauri::RunEvent::ExitRequested {..} => {
+
             // Get app state
             let binding = _app_handle.state::<AppStateWrapper>();
             let mut app_state_guard = binding.0.lock().unwrap();
@@ -54,7 +55,11 @@ fn main() {
             }
 
             // Stop sauna API
+
             app_state_guard.stop_sauna_api();
+
+            // Stop Sauna Radar
+            app_state_guard.stop_sauna_radar();
         }
         _ => {}
     });
@@ -131,4 +136,12 @@ fn store_set(key: &str, value: serde_json::Value, app_state: tauri::State<AppSta
     } else {
         Err("Local Store is null".to_owned())
     }
+}
+
+#[tauri::command]
+fn launch_radar(app_state: tauri::State<AppStateWrapper>, app_handle: tauri::AppHandle) -> Result<(), String> {
+    let sauna_radar_dir = app_handle.path_resolver().resource_dir().unwrap().join("sauna-radar");
+    let mut app_state_guard = app_state.0.lock().unwrap();
+    app_state_guard.start_sauna_radar(sauna_radar_dir)
+    
 }

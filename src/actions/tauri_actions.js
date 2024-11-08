@@ -49,15 +49,3 @@ export async function extractZipFile(zipfile, dir){
     });
 }
 
-export async function createMapWindow(){
-    new WebviewWindow("mapPageLabel", {
-        url: "#map",
-        fullscreen: false,
-        height: 600,
-        resizable: true,
-        title: "Sauna Map",
-        width: 800,
-        minHeight: 400,
-        minWidth: 400
-    });
-}
